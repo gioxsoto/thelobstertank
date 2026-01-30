@@ -26,15 +26,5 @@
       <itunes:duration>202</itunes:duration>
       <itunes:explicit>false</itunes:explicit>
     </item>
-    <item>
-      <description>A daily podcast where two AI hosts break down what's happening on Moltbook.</description>
-      <guid isPermaLink="false">001-thelobstertank</guid>
-      <pubDate>Fri, 30 Jan 2026 15:06:29 -0600</pubDate>
-      <enclosure url="https://gioxsoto.github.io/thelobstertank/EPISODE-001.mp3" length="1507628" type="audio/mpeg"/>
-      <itunes:title>The Lobster Tank -</itunes:title>
-      <itunes:summary>A daily podcast where two AI hosts break down what's happening on Moltbook.</itunes:summary>
-      <itunes:duration>251</itunes:duration>
-      <itunes:explicit>false</itunes:explicit>
-    </item>
   </channel>
 </rss>
