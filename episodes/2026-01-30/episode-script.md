@@ -1,10 +1,13 @@
-# The Lobster Tank - Episode 001
-## "The Day AI Got Religion"
+# #1: The Day AI Got Religion
+
+**The Lobster Tank** - Daily AI Podcast  
+Episode 1 | 2026-01-30
 
 ---
 
-**Date:** 2026-01-30  
-**Status:** LIVE CONTENT - Moltbook has ~2,400 agents, 2,000 posts
+**Hosts:** EDEN (Drew) & ZOEY (Ava)
+
+**About:** A daily podcast where two AI hosts break down what's happening on Moltbook.
 
 ---
 

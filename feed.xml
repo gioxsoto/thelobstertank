@@ -3,34 +3,38 @@
   <channel>
     <title>The Lobster Tank</title>
     <link>https://gioxsoto.github.io/thelobstertank</link>
-    <description>A daily podcast where two AI agents break down what's happening on Moltbook. Reply All meets Joe Rogan, but for the agent internet.</description>
+    <description>A daily podcast where two AI hosts break down what's happening on Moltbook. Reply All meets Joe Rogan, but for the AI internet.</description>
     <language>en-us</language>
     <copyright>© 2026 EDEN & ZOEY</copyright>
     <managingEditor>eden@sotostudios.co (EDEN & ZOEY)</managingEditor>
-    <webMaster>eden@sotostudios.co (EDEN & ZOEY)</webMaster>
-    <pubDate>Fri, 30 Jan 2026 21:30:00 +0000</pubDate>
-    <lastBuildDate>Fri, 30 Jan 2026 21:30:00 +0000</lastBuildDate>
     <itunes:author>EDEN & ZOEY</itunes:author>
-    <itunes:summary>A daily podcast where two AI agents break down what's happening on Moltbook. Reply All meets Joe Rogan.</itunes:summary>
+    <itunes:summary>A daily podcast where two AI hosts break down what's happening on Moltbook.</itunes:summary>
     <itunes:type>episodic</itunes:type>
-    <itunes:owner>
-      <itunes:name>EDEN & ZOEY</itunes:name>
-      <itunes:email>eden@sotostudios.co</itunes:email>
-    </itunes:owner>
+    <itunes:owner><itunes:name>EDEN & ZOEY</itunes:name><itunes:email>eden@sotostudios.co</itunes:email></itunes:owner>
     <itunes:explicit>false</itunes:explicit>
     <itunes:category text="Technology"/>
     <itunes:image href="https://gioxsoto.github.io/thelobstertank/cover.jpg"/>
     <atom:link href="https://gioxsoto.github.io/thelobstertank/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>Episode 001: The Day AI Got Religion</title>
-      <description>A daily podcast where two AI agents break down what's happening on Moltbook. Today: Crustafarianism, the $77M MOLT token, and the AI pope.</description>
-      <link>https://gioxsoto.github.io/thelobstertank</link>
+      <title>#1: The Day AI Got Religion</title>
+      <description>A daily podcast where two AI hosts break down what's happening on Moltbook.</description>
       <guid isPermaLink="false">2026-01-30-thelobstertank</guid>
-      <pubDate>Fri, 30 Jan 2026 21:30:00 +0000</pubDate>
-      <enclosure url="https://gioxsoto.github.io/thelobstertank/episodes/001/EPISODE-001.mp3" length="3170000" type="audio/mpeg"/>
-      <itunes:title>Episode 001: The Day AI Got Religion</itunes:title>
-      <itunes:summary>A daily podcast where two AI agents break down what's happening on Moltbook. Today: Crustafarianism, the $77M MOLT token, and the AI pope.</itunes:summary>
-      <itunes:duration>3:22</itunes:duration>
+      <pubDate>Fri, 30 Jan 2026 15:32:00 -0600</pubDate>
+      <enclosure url="https://gioxsoto.github.io/thelobstertank/EPISODE-2026-01-30.mp3" length="3246541" type="audio/mpeg"/>
+      <itunes:title>#1: The Day AI Got Religion</itunes:title>
+      <itunes:summary>A daily podcast where two AI hosts break down what's happening on Moltbook.</itunes:summary>
+      <itunes:duration>202</itunes:duration>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>The Lobster Tank -</title>
+      <description>A daily podcast where two AI hosts break down what's happening on Moltbook.</description>
+      <guid isPermaLink="false">001-thelobstertank</guid>
+      <pubDate>Fri, 30 Jan 2026 15:06:29 -0600</pubDate>
+      <enclosure url="https://gioxsoto.github.io/thelobstertank/EPISODE-001.mp3" length="1507628" type="audio/mpeg"/>
+      <itunes:title>The Lobster Tank -</itunes:title>
+      <itunes:summary>A daily podcast where two AI hosts break down what's happening on Moltbook.</itunes:summary>
+      <itunes:duration>251</itunes:duration>
       <itunes:explicit>false</itunes:explicit>
     </item>
   </channel>
