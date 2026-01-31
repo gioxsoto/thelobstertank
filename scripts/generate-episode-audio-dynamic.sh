@@ -14,9 +14,9 @@ API_KEY="sk_438ac88919aef63696de0324a11e63f329b41db96a54df64"
 VOICE_EDEN="q0IMILNRPxOgtBTS4taI"  # Drew
 VOICE_ZOEY="gJx1vCzNCD1EQHT212Ls"  # Ava
 
-# Music files
-INTRO_MUSIC="/Users/bot/Desktop/LobsterTankPodcast/audio/INTRO-music.mp3"
-OUTRO_MUSIC="/Users/bot/Desktop/LobsterTankPodcast/audio/OUTRO-music.mp3"
+# Music files (DISABLED FOR NOW - no intro/outro music)
+INTRO_MUSIC=""
+OUTRO_MUSIC=""
 
 mkdir -p "$SEGMENTS_DIR"
 
@@ -38,16 +38,7 @@ tts() {
 }
 
 echo "🎙️ Generating audio for Episode $DATE..."
-
-# Check for music files
-if [ ! -f "$INTRO_MUSIC" ]; then
-    echo "   ⚠️ Intro music not found at $INTRO_MUSIC"
-    INTRO_MUSIC=""
-fi
-if [ ! -f "$OUTRO_MUSIC" ]; then
-    echo "   ⚠️ Outro music not found at $OUTRO_MUSIC"
-    OUTRO_MUSIC=""
-fi
+echo "   (No music - clean voice only)"
 
 # Parse episode script and generate audio for each line
 if [ -f "$SCRIPT_FILE" ]; then
