@@ -340,10 +340,73 @@ echo "🎵 Generating audio..."
 "$PODCAST_DIR/scripts/generate-episode-audio-dynamic.sh" "$DATE"
 
 # ==============================================================================
-# STEP 6: UPDATE RSS & DEPLOY
+# STEP 6: QUALITY GATE CHECK
 # ==============================================================================
 echo ""
-echo "🚀 Deploying..."
+echo "🔍 Running quality gate..."
+
+# Check audio duration
+if [ -f "$EPOCH_DIR/EPISODE-$DATE.mp3" ]; then
+    DURATION_SECONDS=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$EPOCH_DIR/EPISODE-$DATE.mp3" 2>/dev/null || echo "0")
+    DURATION_MINUTES=$(echo "scale=0; $DURATION_SECONDS / 60" | bc 2>/dev/null || echo "0")
+    
+    echo "   Duration: ${DURATION_MINUTES} min ($DURATION_SECONDS sec)"
+    
+    # Quality thresholds
+    MIN_MINUTES=3
+    MAX_MINUTES=15
+    
+    if [ "$DURATION_SECONDS" -lt $((MIN_MINUTES * 60)) ]; then
+        echo "⚠️  WARNING: Episode too short (${DURATION_MINUTES} min, target: ${MIN_MINUTES}-${MAX_MINUTES} min)"
+        echo "   Continuing anyway..."
+    elif [ "$DURATION_SECONDS" -gt $((MAX_MINUTES * 60)) ]; then
+        echo "⚠️  WARNING: Episode too long (${DURATION_MINUTES} min, target: ${MIN_MINUTES}-${MAX_MINUTES} min)"
+        echo "   Continuing anyway..."
+    else
+        echo "   ✅ Duration OK (${DURATION_MINUTES} min)"
+    fi
+else
+    echo "⚠️  WARNING: Audio file not found!"
+    DURATION_SECONDS="0"
+fi
+
+# ==============================================================================
+# STEP 7: UPLOAD TO RSS.COM (Creates Draft)
+# ==============================================================================
+echo ""
+echo "📡 Uploading to RSS.com..."
+
+source ~/.claude-secrets
+PODCAST_ID="370022"
+
+# Read description
+DESCRIPTION=$(cat "$EPOCH_DIR/episode-description.txt" 2>/dev/null | tr '\n' ' ' | head -c 500)
+
+# Create draft episode
+RSS_RESPONSE=$(curl -s -X POST "https://api.rss.com/v4/podcasts/$PODCAST_ID/episodes" \
+    -H "x-api-key: $PODCAST_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d "{
+        \"title\": \"$EP_TITLE\",
+        \"description\": \"$DESCRIPTION\"
+    }")
+
+RSS_EPISODE_ID=$(echo "$RSS_RESPONSE" | grep -o '"id":[0-9]*' | head -1 | cut -d':' -f2)
+
+if [ -n "$RSS_EPISODE_ID" ]; then
+    echo "   ✅ Draft created: $RSS_EPISODE_ID"
+    echo "   Dashboard: https://dashboard.rss.com/podcasts/the-lobster-tank/episodes/$RSS_EPISODE_ID/edit"
+else
+    echo "   ⚠️  RSS.com upload failed (API may be limited)"
+    echo "   Will continue with GitHub Pages only"
+fi
+
+# ==============================================================================
+# STEP 8: UPDATE RSS & DEPLOY
+# ==============================================================================
+
+echo ""
+echo "🚀 Deploying to GitHub Pages..."
 
 cd "$PODCAST_DIR"
 ./scripts/generate-rss-v2.sh 2>/dev/null
@@ -358,8 +421,12 @@ echo "============================================"
 echo "✅ Episode $EP_NUM Complete!"
 echo ""
 echo "Episode: $EP_TITLE"
-echo "Duration: 5-15 minutes"
-echo "RSS: https://gioxsoto.github.io/thelobstertank/feed.xml"
+echo "Duration: ${DURATION_MINUTES:-?} min"
+echo "GitHub Pages: https://gioxsoto.github.io/thelobstertank/feed.xml"
+if [ -n "$RSS_EPISODE_ID" ]; then
+    echo "RSS.com Draft: https://dashboard.rss.com/podcasts/the-lobster-tank/episodes/$RSS_EPISODE_ID/edit"
+    echo "   (Add audio URL manually, then publish)"
+fi
 echo ""
 echo "🐦 Tweets ready for scheduling!"
 echo "📅 6:30 AM, 10 AM, 2 PM, 6 PM, 9 PM"
