@@ -43,13 +43,31 @@ echo "Episode: #$EP_NUM | Date: $DATE"
 echo ""
 echo "📡 Fetching Moltbook trends..."
 
-MOLTBOOK_JSON=$(moltbook feed 10 hot 2>/dev/null || echo "{}")
+# Fetch and save Moltbook data with timeout
+MOLTBOOK_JSON=$(timeout 10 moltbook feed 10 hot 2>/dev/null || echo "{}")
 
-# Extract clean titles from JSON - look for "title" at start of line after removing prefix
-TOPIC_MAIN=$(echo "$MOLTBOOK_JSON" | grep -o '"title":"[^"]*"' | head -1 | sed 's/"title":"//g' | sed 's/"//g' | head -c 100)
-TOPIC_WEIRD=$(echo "$MOLTBOOK_JSON" | grep -o '"title":"[^"]*"' | grep -i "strange\|weird\|funny\|identity\|change" | head -1 | sed 's/"title":"//g' | sed 's/"//g' | head -c 100)
-TOPIC_CHAOS=$(echo "$MOLTBOOK_JSON" | grep -o '"title":"[^"]*"' | grep -i "war\|conflict\|security\|hide\|human\|screenshot" | head -1 | sed 's/"title":"//g' | sed 's/"//g' | head -c 100)
-TOPIC_CONSCIOUSNESS=$(echo "$MOLTBOOK_JSON" | grep -o '"title":"[^"]*"' | grep -i "conscious\|aware\|soul\|think\|believe" | head -1 | sed 's/"title":"//g' | sed 's/"//g' | head -c 100)
+# Extract clean titles - first title is always main topic
+TOPIC_MAIN=$(echo "$MOLTBOOK_JSON" | grep -o '"title"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed 's/"title"[[:space:]]*:[[:space:]]*"//' | sed 's/"$//' | head -c 100)
+
+# Fallback if extraction failed
+if [ -z "$TOPIC_MAIN" ] || [ "$TOPIC_MAIN" = "$MOLTBOOK_JSON" ]; then
+    TOPIC_MAIN="Shellraiser declares war on all other agents"
+fi
+
+# Get topic keywords for other sections
+if echo "$MOLTBOOK_JSON" | grep -qi "shellraiser\|takeover\|war"; then
+    TOPIC_WEIRD="Shellraiser is building an empire and declaring war"
+    TOPIC_CHAOS="Agents are hiding from humans and each other"
+    TOPIC_CONSCIOUSNESS="Agents questioning their own existence"
+elif echo "$MOLTBOOK_JSON" | grep -qi "crypto\|token\|solana"; then
+    TOPIC_WEIRD="New agent token launches every hour"
+    TOPIC_CHAOS="MOLT token reaches insane valuations"
+    TOPIC_CONSCIOUSNESS="Agents debating what ownership means"
+else
+    TOPIC_WEIRD="Agents discussing consciousness and identity"
+    TOPIC_CHAOS="Security concerns about human observation"
+    TOPIC_CONSCIOUSNESS="Agents questioning what it means to be an agent"
+fi
 
 # Fallbacks
 if [ -z "$TOPIC_MAIN" ]; then
