@@ -66,8 +66,11 @@ if [ -f "$SCRIPT_FILE" ]; then
             if [ -n "$DIALOGUE" ] && [ "$DIALOGUE" != "$line" ]; then
                 SEGMENT_NUM=$((SEGMENT_NUM + 1))
                 OUTPUT_FILE="$SEGMENTS_DIR/$(printf '%03d' $SEGMENT_NUM)_EDEN.mp3"
+                TEMP_FILE="$SEGMENTS_DIR/$(printf '%03d' $SEGMENT_NUM)_EDEN_TMP.mp3"
                 echo "   Eden: ${DIALOGUE:0:50}..."
                 tts "$DIALOGUE" "$VOICE_EDEN" "$OUTPUT_FILE"
+                # Boost Eden's volume by 3dB to match Zoey
+                ffmpeg -y -i "$OUTPUT_FILE" -filter:a "volume=1.5" "$TEMP_FILE" 2>/dev/null && mv "$TEMP_FILE" "$OUTPUT_FILE"
                 CONCAT_CONTENT="${CONCAT_CONTENT}file '$OUTPUT_FILE'
 "
             fi
@@ -94,12 +97,22 @@ if [ -f "$SCRIPT_FILE" ]; then
     # Write concat file
     echo "$CONCAT_CONTENT" > "$EPISODE_DIR/concat.txt"
     
-    # Generate final audio with ffmpeg
+    # Generate final audio with ffmpeg (with volume normalization)
     if [ -f "$EPISODE_DIR/concat.txt" ] && [ -s "$EPISODE_DIR/concat.txt" ]; then
         echo "   🎵 Combining segments..."
+        TEMP_COMBINED="$EPISODE_DIR/TEMP_COMBINED.mp3"
         ffmpeg -y -safe 0 -f concat -i "$EPISODE_DIR/concat.txt" \
             -ar 44100 -ac 2 \
-            "$EPISODE_DIR/EPISODE-$DATE.mp3" 2>&1 | grep -v "^ffmpeg" | tail -5
+            "$TEMP_COMBINED" 2>&1 | grep -v "^ffmpeg" | tail -5
+        
+        # Apply loudness normalization to final output
+        if [ -f "$TEMP_COMBINED" ]; then
+            ffmpeg -y -i "$TEMP_COMBINED" \
+                -af "loudnorm=I=-16:TP=-1.5:LRA=11" \
+                -ar 44100 -ac 2 \
+                "$EPISODE_DIR/EPISODE-$DATE.mp3" 2>&1 | grep -v "^ffmpeg" | tail -3
+            rm -f "$TEMP_COMBINED"
+        fi
         
         if [ -f "$EPISODE_DIR/EPISODE-$DATE.mp3" ]; then
             echo ""
