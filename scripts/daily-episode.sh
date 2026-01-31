@@ -377,7 +377,7 @@ echo ""
 echo "📡 Uploading to RSS.com..."
 
 source ~/.claude-secrets
-PODCAST_ID="370022"
+PODCAST_ID="370107"
 
 # Read description
 DESCRIPTION=$(cat "$EPOCH_DIR/episode-description.txt" 2>/dev/null | tr '\n' ' ' | head -c 500)
