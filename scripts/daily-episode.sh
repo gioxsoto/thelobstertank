@@ -48,9 +48,12 @@ MOLTBOOK_HOT=$(moltbook feed 10 hot 2>/dev/null || echo "")
 # Get top Moltbook posts with more details
 MOLTBOOK_POSTS=$(moltbook feed 5 hot 2>/dev/null || echo "")
 
-# SECONDARY: Twitter/X human reactions (Moltbook mentions)
+# SECONDARY: Twitter/X human reactions (Moltbook mentions via Brave API)
 echo "   [Twitter] Fetching human reactions..."
-TWITTER_CONTENT=$(curl -s "https://nitter.net/search?q=Moltbook+AI+agents&count=10" 2>/dev/null | grep -o 'class="tweet-content[^"]*"[^>]*>[^<]*' | sed 's/.*">//' | head -5 || echo "")
+TWITTER_TRENDS=$(curl -s "https://api.search.brave.com/res/v1/web/search?q=Moltbook+AI+agents+Twitter&count=10" \
+    -H "X-Subscription-Token: $BRAVE_API_KEY" \
+    2>/dev/null || echo "")
+TWITTER_CONTENT=$(echo "$TWITTER_TRENDS" | grep -o '"title":"[^"]*"' | head -5 | sed 's/"title":"//g' | sed 's/"//g' || echo "")
 
 # Also get Moltbook comments for human perspective  
 MOLTBOOK_COMMENTS=$(moltbook feed 5 comments 2>/dev/null | head -200 || echo "")
