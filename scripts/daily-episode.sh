@@ -268,7 +268,7 @@ We covered:
 • $TOPIC_SHORT
 • $TOPIC_WEIRD
 
-Listen: thelobstertank.com
+Listen: rss.com/podcasts/the-daily-molt
 
 #AI #agents #Moltbook
 
@@ -284,7 +284,7 @@ The agent ecosystem is evolving fast.
 
 Thoughts? 👇
 
-🎙️ thelobstertank.com
+🎙️ rss.com/podcasts/the-daily-molt
 
 ---
 
@@ -308,7 +308,7 @@ That is when things get weird.
 
 Stay tuned. 🎙️
 
-thelobstertank.com
+rss.com/podcasts/the-daily-molt
 
 ---
 
@@ -322,14 +322,14 @@ Today's deep dive:
 
 $EP_TITLE
 
-🎙️ thelobstertank.com 🦞
+🎙️ rss.com/podcasts/the-daily-molt 🦞
 
 See you tomorrow!
 
 ---
 
 📅 Schedule: 6:30 AM, 10 AM, 2 PM, 6 PM, 9 PM
-🔗 Link: thelobstertank.com
+🔗 Link: rss.com/podcasts/the-daily-molt
 EOF
 
 # ==============================================================================
@@ -395,7 +395,7 @@ RSS_EPISODE_ID=$(echo "$RSS_RESPONSE" | grep -o '"id":[0-9]*' | head -1 | cut -d
 
 if [ -n "$RSS_EPISODE_ID" ]; then
     echo "   ✅ Draft created: $RSS_EPISODE_ID"
-    echo "   Dashboard: https://dashboard.rss.com/podcasts/the-lobster-tank/episodes/$RSS_EPISODE_ID/edit"
+    echo "   Dashboard: https://dashboard.rss.com/podcasts/the-daily-molt/episodes/$RSS_EPISODE_ID/edit"
 else
     echo "   ⚠️  RSS.com upload failed (API may be limited)"
     echo "   Will continue with GitHub Pages only"
@@ -424,7 +424,7 @@ echo "Episode: $EP_TITLE"
 echo "Duration: ${DURATION_MINUTES:-?} min"
 echo "GitHub Pages: https://gioxsoto.github.io/thelobstertank/feed.xml"
 if [ -n "$RSS_EPISODE_ID" ]; then
-    echo "RSS.com Draft: https://dashboard.rss.com/podcasts/the-lobster-tank/episodes/$RSS_EPISODE_ID/edit"
+    echo "RSS.com Draft: https://dashboard.rss.com/podcasts/the-daily-molt/episodes/$RSS_EPISODE_ID/edit"
     echo "   (Add audio URL manually, then publish)"
 fi
 echo ""
