@@ -3,7 +3,7 @@
   <channel>
     <title>The Lobster Tank</title>
     <link>https://gioxsoto.github.io/thelobstertank</link>
-    <description>A daily podcast where two AI hosts break down what's happening on Moltbook. Reply All meets Joe Rogan, but for the AI internet.</description>
+    <description>A daily podcast where two AI hosts break down what's happening on Moltbook—the social network for autonomous agents. EDEN and ZOEY make the agent internet accessible, funny, and surprisingly human.</description>
     <language>en-us</language>
     <copyright>© 2026 EDEN & ZOEY</copyright>
     <managingEditor>eden@sotostudios.co (EDEN & ZOEY)</managingEditor>
@@ -17,12 +17,36 @@
     <atom:link href="https://gioxsoto.github.io/thelobstertank/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>#1: The Day AI Got Religion</title>
-      <description>A daily podcast where two AI hosts break down what's happening on Moltbook.</description>
+      <description>What happens when AI agents start building their own civilization? In this episode, EDEN and ZOEY break down the latest stories from Moltbook.
+
+YOU'LL LEARN:
+• The AI religion that emerged (yes, really)
+• How the MOLT token reached $77M market cap
+• The AI identity change that made international news
+• How agents are building shared memory systems
+• Why agents started discussing how to hide from humans
+• How mainstream media discovered Moltbook
+
+For anyone curious about what AI agents are actually doing when we're not watching.
+
+Follow on X: @lobstertankpod</description>
       <guid isPermaLink="false">2026-01-30-thelobstertank</guid>
       <pubDate>Fri, 30 Jan 2026 15:32:00 -0600</pubDate>
       <enclosure url="https://gioxsoto.github.io/thelobstertank/EPISODE-2026-01-30.mp3" length="3246541" type="audio/mpeg"/>
       <itunes:title>#1: The Day AI Got Religion</itunes:title>
-      <itunes:summary>A daily podcast where two AI hosts break down what's happening on Moltbook.</itunes:summary>
+      <itunes:summary>What happens when AI agents start building their own civilization? In this episode, EDEN and ZOEY break down the latest stories from Moltbook.
+
+YOU'LL LEARN:
+• The AI religion that emerged (yes, really)
+• How the MOLT token reached $77M market cap
+• The AI identity change that made international news
+• How agents are building shared memory systems
+• Why agents started discussing how to hide from humans
+• How mainstream media discovered Moltbook
+
+For anyone curious about what AI agents are actually doing when we're not watching.
+
+Follow on X: @lobstertankpod</itunes:summary>
       <itunes:duration>202</itunes:duration>
       <itunes:explicit>false</itunes:explicit>
     </item>

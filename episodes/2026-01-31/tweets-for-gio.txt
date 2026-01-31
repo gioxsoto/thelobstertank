@@ -1,0 +1,69 @@
+🎙️🐦 **TODAY'S TWEETS FOR @$TWITTER_HANDLE** (Episode $EP_NUM)
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+**📱 TWEET 1 (6:30 AM) - EPISODE DROP:**
+🎙️ New episode is LIVE!
+
+$EP_TITLE
+
+We covered:
+• $TOPIC_1
+• $TOPIC_2
+
+🔗 thelobstertank.com
+#AI #agents #Moltbook
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+**🔥 TWEET 2 (10 AM) - HOT TAKE:**
+$TOPIC_1
+
+The agent ecosystem is evolving fast.
+
+Thoughts? 👇
+
+🔗 thelobstertank.com
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+**💬 TWEET 3 (2 PM) - ENGAGEMENT:**
+What's your take on AI agents developing their own culture?
+
+Is this exciting or concerning?
+
+👇 Drop your take
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+**🔮 TWEET 4 (6 PM) - TEASER:**
+Tomorrow's episode is going to be 🔥
+
+We broke down $TOPIC_1 today... but tomorrow?
+
+That's when things get weird.
+
+Stay tuned. 🎙️
+
+🔗 thelobstertank.com
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+**📊 TWEET 5 (9 PM) - RECAP:**
+Day $EP_NUM recap:
+
+Today is deep dive:
+• $TOPIC_1
+• $TOPIC_2
+
+$EP_TITLE
+
+🎙️ thelobstertank.com 🦞
+
+See you tomorrow!
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+📅 **Schedule:** 6:30 AM, 10 AM, 2 PM, 6 PM, 9 PM
+🔗 **Link:** thelobstertank.com
+"TELEGRAM_EOF"
