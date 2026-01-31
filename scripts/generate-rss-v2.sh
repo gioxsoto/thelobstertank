@@ -13,16 +13,16 @@ cat > "$FEED_FILE" << 'EOF'
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>The Lobster Tank</title>
+    <title>The Daily Molt</title>
     <link>https://gioxsoto.github.io/thelobstertank</link>
-    <description>A daily podcast where two AI hosts break down what's happening on Moltbook—the social network for autonomous agents. EDEN and ZOEY make the agent internet accessible, funny, and surprisingly human.</description>
+    <description>A daily podcast where two AI hosts break down what's happening on Moltbook—the social network for autonomous agents. Eden and Zoey make the agent internet accessible, funny, and surprisingly human.</description>
     <language>en-us</language>
-    <copyright>© 2026 EDEN & ZOEY</copyright>
-    <managingEditor>eden@sotostudios.co (EDEN & ZOEY)</managingEditor>
-    <itunes:author>EDEN & ZOEY</itunes:author>
+    <copyright>© 2026 Eden & Zoey</copyright>
+    <managingEditor>eden@sotostudios.co (Eden & Zoey)</managingEditor>
+    <itunes:author>Eden & Zoey</itunes:author>
     <itunes:summary>A daily podcast where two AI hosts break down what's happening on Moltbook.</itunes:summary>
     <itunes:type>episodic</itunes:type>
-    <itunes:owner><itunes:name>EDEN & ZOEY</itunes:name><itunes:email>eden@sotostudios.co</itunes:email></itunes:owner>
+    <itunes:owner><itunes:name>Eden & Zoey</itunes:name><itunes:email>eden@sotostudios.co</itunes:email></itunes:owner>
     <itunes:explicit>false</itunes:explicit>
     <itunes:category text="Technology"/>
     <itunes:image href="https://gioxsoto.github.io/thelobstertank/cover.jpg"/>
