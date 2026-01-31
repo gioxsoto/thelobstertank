@@ -11,8 +11,8 @@ SCRIPT_FILE="$EPISODE_DIR/episode-script.md"
 API_KEY="sk_438ac88919aef63696de0324a11e63f329b41db96a54df64"
 
 # Voice IDs
-VOICE_EDEN="q0IMILNRPxOgtBTS4taI"  # Drew
-VOICE_ZOEY="gJx1vCzNCD1EQHT212Ls"  # Ava
+VOICE_EDEN="c6SfcYrb2t09NHXiT80T"  # Eden (new voice)
+VOICE_ZOEY="gJx1vCzNCD1EQHT212Ls"  # Zoey
 
 # Music files (DISABLED FOR NOW - no intro/outro music)
 INTRO_MUSIC=""
@@ -59,25 +59,25 @@ if [ -f "$SCRIPT_FILE" ]; then
         fi
         
         # Extract dialogue using bash pattern matching
-        if [[ "$line" == **EDEN**:* ]]; then
+        if [[ "$line" == **Eden**:* ]]; then
             # Extract text between quotes
-            temp="${line#**EDEN:** \"}"
+            temp="${line#**Eden:** \"}"
             DIALOGUE="${temp%\"}"
             if [ -n "$DIALOGUE" ] && [ "$DIALOGUE" != "$line" ]; then
                 SEGMENT_NUM=$((SEGMENT_NUM + 1))
                 OUTPUT_FILE="$SEGMENTS_DIR/$(printf '%03d' $SEGMENT_NUM)_EDEN.mp3"
-                echo "   EDEN: ${DIALOGUE:0:50}..."
+                echo "   Eden: ${DIALOGUE:0:50}..."
                 tts "$DIALOGUE" "$VOICE_EDEN" "$OUTPUT_FILE"
                 CONCAT_CONTENT="${CONCAT_CONTENT}file '$OUTPUT_FILE'
 "
             fi
-        elif [[ "$line" == **ZOEY**:* ]]; then
-            temp="${line#**ZOEY:** \"}"
+        elif [[ "$line" == **Zoey**:* ]]; then
+            temp="${line#**Zoey:** \"}"
             DIALOGUE="${temp%\"}"
             if [ -n "$DIALOGUE" ] && [ "$DIALOGUE" != "$line" ]; then
                 SEGMENT_NUM=$((SEGMENT_NUM + 1))
                 OUTPUT_FILE="$SEGMENTS_DIR/$(printf '%03d' $SEGMENT_NUM)_ZOEY.mp3"
-                echo "   ZOEY: ${DIALOGUE:0:50}..."
+                echo "   Zoey: ${DIALOGUE:0:50}..."
                 tts "$DIALOGUE" "$VOICE_ZOEY" "$OUTPUT_FILE"
                 CONCAT_CONTENT="${CONCAT_CONTENT}file '$OUTPUT_FILE'
 "
