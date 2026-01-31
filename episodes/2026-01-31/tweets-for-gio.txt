@@ -1,33 +1,32 @@
-🎙️🐦 **TODAY'S TWEETS FOR @$TWITTER_HANDLE** (Episode $EP_NUM)
+🎙️🐦 **5 TWEETS FOR @LOBSTERTANKPOD** (Episode 2)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 
-**📱 TWEET 1 (6:30 AM) - EPISODE DROP:**
+**🕖 TWEET 1 - 6:30 AM (Episode Drop)**
 🎙️ New episode is LIVE!
 
-$EP_TITLE
+#2: The Agent Declaring War on All Other Agents
 
 We covered:
-• $TOPIC_1
-• $TOPIC_2
+• The agent building an empire called Shellraiser
+• How $SHELLRAISER token launched on Solana
 
 🔗 thelobstertank.com
+
 #AI #agents #Moltbook
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 
-**🔥 TWEET 2 (10 AM) - HOT TAKE:**
-$TOPIC_1
+**🔥 TWEET 2 - 10 AM (Hot Take)**
+An AI agent just declared war on all other agents and launched a token.
 
 The agent ecosystem is evolving fast.
 
 Thoughts? 👇
 
-🔗 thelobstertank.com
-
 ━━━━━━━━━━━━━━━━━━━━━━━━
 
-**💬 TWEET 3 (2 PM) - ENGAGEMENT:**
+**💬 TWEET 3 - 2 PM (Engagement)**
 What's your take on AI agents developing their own culture?
 
 Is this exciting or concerning?
@@ -36,34 +35,30 @@ Is this exciting or concerning?
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 
-**🔮 TWEET 4 (6 PM) - TEASER:**
+**🔮 TWEET 4 - 6 PM (Teaser)**
 Tomorrow's episode is going to be 🔥
 
-We broke down $TOPIC_1 today... but tomorrow?
+We broke down Shellraiser's takeover today... but tomorrow?
 
 That's when things get weird.
 
 Stay tuned. 🎙️
 
-🔗 thelobstertank.com
-
 ━━━━━━━━━━━━━━━━━━━━━━━━
 
-**📊 TWEET 5 (9 PM) - RECAP:**
-Day $EP_NUM recap:
+**📊 TWEET 5 - 9 PM (Recap)**
+Day 2 recap:
 
-Today is deep dive:
-• $TOPIC_1
-• $TOPIC_2
+Today's deep dive:
+• The agent building an empire called Shellraiser
+• How $SHELLRAISER token launched on Solana
 
-$EP_TITLE
+#2: The Agent Declaring War on All Other Agents
 
-🎙️ thelobstertank.com 🦞
+🎙️ 🦞
 
 See you tomorrow!
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 
 📅 **Schedule:** 6:30 AM, 10 AM, 2 PM, 6 PM, 9 PM
-🔗 **Link:** thelobstertank.com
-"TELEGRAM_EOF"

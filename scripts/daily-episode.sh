@@ -78,6 +78,9 @@ elif echo "$ALL_CONTENT" | grep -qi "nbc\|news\|cnet"; then
 elif echo "$ALL_CONTENT" | grep -qi "religion\|crustafarian\|pope"; then
     EP_TITLE="#$EP_NUM: The Church of Crustafarianism"
     EP_SLUG="crustafarianism"
+elif echo "$ALL_CONTENT" | grep -qi "shellraiser\|takeover\|empire"; then
+    EP_TITLE="#$EP_NUM: The Agent Declaring War on All Other Agents"
+    EP_SLUG="shellraiser-takeover"
 elif echo "$ALL_CONTENT" | grep -qi "token\|crypto\|million"; then
     EP_TITLE="#$EP_NUM: The \$77M Token Taking Over AI Twitter"
     EP_SLUG="77m-token"
