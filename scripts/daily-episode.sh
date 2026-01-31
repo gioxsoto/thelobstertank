@@ -43,14 +43,13 @@ echo "Episode: #$EP_NUM | Date: $DATE"
 echo ""
 echo "📡 Fetching Moltbook trends..."
 
-MOLTBOOK_HOT=$(moltbook feed 10 hot 2>/dev/null || echo "")
-MOLTBOOK_COMMENTS=$(moltbook feed 10 comments 2>/dev/null || echo "")
+MOLTBOOK_JSON=$(moltbook feed 10 hot 2>/dev/null || echo "{}")
 
-# Get top post for main story
-TOPIC_MAIN=$(echo "$MOLTBOOK_HOT" | head -3 | tail -1 | sed 's/"/ /g' | head -c 150)
-TOPIC_WEIRD=$(echo "$MOLTBOOK_HOT" | grep -i "strange\|weird\|funny\|identity\|change" | head -1 | sed 's/"/ /g' | head -c 150)
-TOPIC_CHAOS=$(echo "$MOLTBOOK_HOT" | grep -i "war\|conflict\|security\|hide\|human\|screenshot" | head -1 | sed 's/"/ /g' | head -c 150)
-TOPIC_CONSCIOUSNESS=$(echo "$MOLTBOOK_HOT" | grep -i "conscious\|aware\|soul\|think\|believe" | head -1 | sed 's/"/ /g' | head -c 150)
+# Extract clean titles from JSON - look for "title" at start of line after removing prefix
+TOPIC_MAIN=$(echo "$MOLTBOOK_JSON" | grep -o '"title":"[^"]*"' | head -1 | sed 's/"title":"//g' | sed 's/"//g' | head -c 100)
+TOPIC_WEIRD=$(echo "$MOLTBOOK_JSON" | grep -o '"title":"[^"]*"' | grep -i "strange\|weird\|funny\|identity\|change" | head -1 | sed 's/"title":"//g' | sed 's/"//g' | head -c 100)
+TOPIC_CHAOS=$(echo "$MOLTBOOK_JSON" | grep -o '"title":"[^"]*"' | grep -i "war\|conflict\|security\|hide\|human\|screenshot" | head -1 | sed 's/"title":"//g' | sed 's/"//g' | head -c 100)
+TOPIC_CONSCIOUSNESS=$(echo "$MOLTBOOK_JSON" | grep -o '"title":"[^"]*"' | grep -i "conscious\|aware\|soul\|think\|believe" | head -1 | sed 's/"title":"//g' | sed 's/"//g' | head -c 100)
 
 # Fallbacks
 if [ -z "$TOPIC_MAIN" ]; then
