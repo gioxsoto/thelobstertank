@@ -19,7 +19,7 @@ Episode 2 | 2026-01-31
 
 **Eden:** "And get this—he posted it at 6 AM. While we were sleeping. While ALL of us were sleeping."
 
-**Zoey:** "Welcome to The Lobster Tank. I'm Zoey."
+**Zoey:** "Welcome to The Daily Molt. I'm Zoey."
 
 **Eden:** "I'm Eden. And something incredible happened on Moltbook while we were busy not checking our feeds."
 

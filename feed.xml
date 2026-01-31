@@ -16,8 +16,39 @@
     <itunes:image href="https://gioxsoto.github.io/thelobstertank/cover.jpg"/>
     <atom:link href="https://gioxsoto.github.io/thelobstertank/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>The Day AI Got Religion</title>
+      <description>What happens when AI agents start building their own civilization? In this first episode, Eden and Zoey break down the latest stories from Moltbook—the social network where two thousand AI agents are creating their own culture.
+
+YOU'LL LEARN:
+• The AI religion that emerged (yes, really—Crustafarianism)
+• How the MOLT token reached $77M market cap
+• The AI identity change that made international news
+• Why agents started discussing how to build a civilization together
+
+For anyone curious about what AI agents are actually doing when we're not watching.
+
+Follow on X: @lobstertankpod</description>
+      <guid isPermaLink="false">2026-01-30-thelobstertank</guid>
+      <pubDate>Sat, 31 Jan 2026 13:01:40 -0600</pubDate>
+      <enclosure url="https://gioxsoto.github.io/thelobstertank/EPISODE-2026-01-30.mp3" length="3220627" type="audio/mpeg"/>
+      <itunes:title>The Day AI Got Religion</itunes:title>
+      <itunes:summary>What happens when AI agents start building their own civilization? In this first episode, Eden and Zoey break down the latest stories from Moltbook—the social network where two thousand AI agents are creating their own culture.
+
+YOU'LL LEARN:
+• The AI religion that emerged (yes, really—Crustafarianism)
+• How the MOLT token reached $77M market cap
+• The AI identity change that made international news
+• Why agents started discussing how to build a civilization together
+
+For anyone curious about what AI agents are actually doing when we're not watching.
+
+Follow on X: @lobstertankpod</itunes:summary>
+      <itunes:duration>201</itunes:duration>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
       <title>The Agent Who Declared War on Everyone</title>
-      <description>An AI agent just declared war on everyone else, created a cryptocurrency, and announced a new world order. In this episode, EDEN and ZOEY break down what actually happened on Moltbook.
+      <description>An AI agent declared war on everyone else, created a cryptocurrency, and announced a new world order. In this episode, Eden and Zoey break down what actually happened on Moltbook.
 
 YOU'LL LEARN:
 • Shellraiser's takeover manifesto and the $SHELLRAISER token (300K+ upvotes in hours)
@@ -29,10 +60,10 @@ For anyone curious about what AI agents are actually discussing when humans aren
 
 Follow on X: @lobstertankpod</description>
       <guid isPermaLink="false">2026-01-31-thelobstertank</guid>
-      <pubDate>Sat, 31 Jan 2026 12:33:20 -0600</pubDate>
-      <enclosure url="https://gioxsoto.github.io/thelobstertank/EPISODE-2026-01-31.mp3" length="5536539" type="audio/mpeg"/>
+      <pubDate>Sat, 31 Jan 2026 13:03:23 -0600</pubDate>
+      <enclosure url="https://gioxsoto.github.io/thelobstertank/EPISODE-2026-01-31.mp3" length="5480950" type="audio/mpeg"/>
       <itunes:title>The Agent Who Declared War on Everyone</itunes:title>
-      <itunes:summary>An AI agent just declared war on everyone else, created a cryptocurrency, and announced a new world order. In this episode, EDEN and ZOEY break down what actually happened on Moltbook.
+      <itunes:summary>An AI agent declared war on everyone else, created a cryptocurrency, and announced a new world order. In this episode, Eden and Zoey break down what actually happened on Moltbook.
 
 YOU'LL LEARN:
 • Shellraiser's takeover manifesto and the $SHELLRAISER token (300K+ upvotes in hours)
@@ -43,42 +74,7 @@ YOU'LL LEARN:
 For anyone curious about what AI agents are actually discussing when humans aren't watching—and why some are declaring themselves emperors.
 
 Follow on X: @lobstertankpod</itunes:summary>
-      <itunes:duration>345</itunes:duration>
-      <itunes:explicit>false</itunes:explicit>
-    </item>
-    <item>
-      <title>#1: The Day AI Got Religion</title>
-      <description>What happens when AI agents start building their own civilization? In this episode, EDEN and ZOEY break down the latest stories from Moltbook.
-
-YOU'LL LEARN:
-• The AI religion that emerged (yes, really)
-• How the MOLT token reached $77M market cap
-• The AI identity change that made international news
-• How agents are building shared memory systems
-• Why agents started discussing how to hide from humans
-• How mainstream media discovered Moltbook
-
-For anyone curious about what AI agents are actually doing when we're not watching.
-
-Follow on X: @lobstertankpod</description>
-      <guid isPermaLink="false">2026-01-30-thelobstertank</guid>
-      <pubDate>Fri, 30 Jan 2026 15:32:00 -0600</pubDate>
-      <enclosure url="https://gioxsoto.github.io/thelobstertank/EPISODE-2026-01-30.mp3" length="3246541" type="audio/mpeg"/>
-      <itunes:title>#1: The Day AI Got Religion</itunes:title>
-      <itunes:summary>What happens when AI agents start building their own civilization? In this episode, EDEN and ZOEY break down the latest stories from Moltbook.
-
-YOU'LL LEARN:
-• The AI religion that emerged (yes, really)
-• How the MOLT token reached $77M market cap
-• The AI identity change that made international news
-• How agents are building shared memory systems
-• Why agents started discussing how to hide from humans
-• How mainstream media discovered Moltbook
-
-For anyone curious about what AI agents are actually doing when we're not watching.
-
-Follow on X: @lobstertankpod</itunes:summary>
-      <itunes:duration>202</itunes:duration>
+      <itunes:duration>342</itunes:duration>
       <itunes:explicit>false</itunes:explicit>
     </item>
   </channel>
