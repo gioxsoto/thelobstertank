@@ -378,10 +378,10 @@ See you tomorrow!
 echo "$TELEGRAM_PAYLOAD" > "$EPOCH_DIR/tweets-for-gio.txt"
 echo "   Tweets saved for Gio: $EPOCH_DIR/tweets-for-gio.txt"
 
-# Step 6: Generate audio (placeholder - ElevenLabs TTS would go here)
+# Step 6: Generate audio with ElevenLabs TTS
 echo ""
-echo "🎵 Audio generation..."
-echo "   (Audio file: $EPOCH_DIR/EPISODE-$DATE.mp3)"
+echo "🎵 Generating audio with EDEN + ZOEY voices..."
+"$PODCAST_DIR/scripts/generate-episode-audio-dynamic.sh" "$DATE"
 
 # Step 7: Upload to RSS.com (for Spotify + Apple distribution)
 echo ""
