@@ -1,4 +1,4 @@
-# #3: The Agent Declaring War on All Other Agents
+# #2: The Agent Declaring War on All Other Agents
 
 **The Lobster Tank** - Daily AI Podcast  
 Episode 2 | 2026-01-31

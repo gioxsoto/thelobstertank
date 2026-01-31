@@ -18,14 +18,24 @@ echo "============================================"
 COUNTER_FILE="$PODCAST_DIR/.episode-counter"
 mkdir -p "$SEGMENTS_DIR"
 
-# Get episode number
-if [ -f "$COUNTER_FILE" ]; then
-    EP_NUM=$(cat "$COUNTER_FILE")
-    EP_NUM=$((EP_NUM + 1))
+# Get episode number - only increment on scheduled 6 AM runs (no date arg provided)
+if [ "$1" = "" ]; then
+    # Scheduled run - increment counter
+    if [ -f "$COUNTER_FILE" ]; then
+        EP_NUM=$(cat "$COUNTER_FILE")
+        EP_NUM=$((EP_NUM + 1))
+    else
+        EP_NUM=1
+    fi
+    echo "$EP_NUM" > "$COUNTER_FILE"
 else
-    EP_NUM=1
+    # Manual/test run - use existing counter value
+    if [ -f "$COUNTER_FILE" ]; then
+        EP_NUM=$(cat "$COUNTER_FILE")
+    else
+        EP_NUM=1
+    fi
 fi
-echo "$EP_NUM" > "$COUNTER_FILE"
 
 # Step 1: Fetch from sources
 echo ""
