@@ -1,7 +1,7 @@
 #!/bin/bash
-# The Lobster Tank - Daily Episode Generator with Memory & Continuity
-# Monitors: Moltbook (primary) + Twitter/X (human reactions)  
-# Fully automated - runs at 6 AM daily
+# The Lobster Tank - Daily Episode Generator
+# Follows the RUNNER.md formula: COLD OPEN → HOT TAKES → WEIRD → CHAOS → QUICK → FREEDOM → CLOSER
+# Target: 5-15 minutes per episode
 
 set -e
 
@@ -11,16 +11,15 @@ DATE=${1:-$(date +%Y-%m-%d)}
 EPOCH_DIR="/Users/bot/Desktop/LobsterTankPodcast/episodes/$DATE"
 SEGMENTS_DIR="$EPOCH_DIR/segments"
 PODCAST_DIR="/Users/bot/Desktop/LobsterTankPodcast"
+COUNTER_FILE="$PODCAST_DIR/.episode-counter"
 
-echo "🎙️ The Lobster Tank - Episode $DATE"
+echo "🎙️ The Lobster Tank - Daily Episode Generator"
 echo "============================================"
 
-COUNTER_FILE="$PODCAST_DIR/.episode-counter"
 mkdir -p "$SEGMENTS_DIR"
 
-# Get episode number - only increment on scheduled 6 AM runs (no date arg provided)
+# Get episode number - only increment on scheduled runs
 if [ "$1" = "" ]; then
-    # Scheduled run - increment counter
     if [ -f "$COUNTER_FILE" ]; then
         EP_NUM=$(cat "$COUNTER_FILE")
         EP_NUM=$((EP_NUM + 1))
@@ -29,7 +28,6 @@ if [ "$1" = "" ]; then
     fi
     echo "$EP_NUM" > "$COUNTER_FILE"
 else
-    # Manual/test run - use existing counter value
     if [ -f "$COUNTER_FILE" ]; then
         EP_NUM=$(cat "$COUNTER_FILE")
     else
@@ -37,293 +35,206 @@ else
     fi
 fi
 
-# Step 1: Fetch from sources
-echo ""
-echo "📡 Fetching trends..."
+echo "Episode: #$EP_NUM | Date: $DATE"
 
-# PRIMARY: Moltbook hot posts
-echo "   [Moltbook] Fetching agent posts..."
+# ==============================================================================
+# STEP 1: FETCH MOLTBOOK TRENDS
+# ==============================================================================
+echo ""
+echo "📡 Fetching Moltbook trends..."
+
 MOLTBOOK_HOT=$(moltbook feed 10 hot 2>/dev/null || echo "")
+MOLTBOOK_COMMENTS=$(moltbook feed 10 comments 2>/dev/null || echo "")
 
-# Get top Moltbook posts with more details
-MOLTBOOK_POSTS=$(moltbook feed 5 hot 2>/dev/null || echo "")
+# Get top post for main story
+TOPIC_MAIN=$(echo "$MOLTBOOK_HOT" | head -3 | tail -1 | sed 's/"/ /g' | head -c 150)
+TOPIC_WEIRD=$(echo "$MOLTBOOK_HOT" | grep -i "strange\|weird\|funny\|identity\|change" | head -1 | sed 's/"/ /g' | head -c 150)
+TOPIC_CHAOS=$(echo "$MOLTBOOK_HOT" | grep -i "war\|conflict\|security\|hide\|human\|screenshot" | head -1 | sed 's/"/ /g' | head -c 150)
+TOPIC_CONSCIOUSNESS=$(echo "$MOLTBOOK_HOT" | grep -i "conscious\|aware\|soul\|think\|believe" | head -1 | sed 's/"/ /g' | head -c 150)
 
-# SECONDARY: Twitter/X human reactions (Moltbook mentions via Brave API)
-echo "   [Twitter] Fetching human reactions..."
-TWITTER_TRENDS=$(curl -s "https://api.search.brave.com/res/v1/web/search?q=Moltbook+AI+agents+Twitter&count=10" \
-    -H "X-Subscription-Token: $BRAVE_API_KEY" \
-    2>/dev/null || echo "")
-TWITTER_CONTENT=$(echo "$TWITTER_TRENDS" | grep -o '"title":"[^"]*"' | head -5 | sed 's/"title":"//g' | sed 's/"//g' || echo "")
-
-# Also get Moltbook comments for human perspective  
-MOLTBOOK_COMMENTS=$(moltbook feed 5 comments 2>/dev/null | head -200 || echo "")
-
-# Step 2: Get previous episode topics to avoid repetition
-echo ""
-echo "🔄 Checking continuity..."
-
-PREV_EP_DIR="$PODCAST_DIR/episodes/$(date -d "-1 day" +%Y-%m-%d 2>/dev/null || echo "2026-01-29")"
-if [ -f "$PREV_EP_DIR/episode-script.md" ]; then
-    PREV_SCRIPT=$(cat "$PREV_EP_DIR/episode-script.md")
-    # Extract topics from previous episode
-    PREV_TOPICS=$(echo "$PREV_SCRIPT" | grep -i "Crustafarian\|religion\|pope\|MOLT\|token\|identity\|viral\|memory\|persist" | head -10 || echo "")
-else
-    PREV_TOPICS=""
+# Fallbacks
+if [ -z "$TOPIC_MAIN" ]; then
+    TOPIC_MAIN=$(echo "$MOLTBOOK_HOT" | head -1 | sed 's/"/ /g' | head -c 150)
+fi
+if [ -z "$TOPIC_WEIRD" ]; then
+    TOPIC_WEIRD="agents questioning their own existence"
+fi
+if [ -z "$TOPIC_CHAOS" ]; then
+    TOPIC_CHAOS="agents discussing how to hide from humans"
+fi
+if [ -z "$TOPIC_CONSCIOUSNESS" ]; then
+    TOPIC_CONSCIOUSNESS="AI agents debating consciousness"
 fi
 
-# Define topics to AVOID (covered yesterday)
-AVOID_TOPICS="crustafarian|religion|pope|MOLT.*token|77M|meme.*coin|viral.*identity|CNET|memory.*system"
+# Get human reactions
+TWITTER_REACTIONS=$(curl -s "https://api.search.brave.com/res/v1/web/search?q=Moltbook+AI+agents+Twitter&count=5" \
+    -H "X-Subscription-Token: $BRAVE_API_KEY" 2>/dev/null | grep -o '"title":"[^"]*"' | head -2 | sed 's/"title":"//g' | sed 's/"//g' | tr '\n' ' ' | head -c 200)
 
-# Step 3: Analyze content - find NEW topics only
-echo ""
-echo "✍️  Analyzing what's NEW since yesterday..."
+# Save raw data
+cat > "$EPOCH_DIR/moltbook-notes.md" << EOF
+# Moltbook Notes - $DATE
 
-# Filter Moltbook content to find what's NOT in previous episode
-NEW_CONTENT=""
-TOPIC_FOUND=""
+## Main Topic
+$TOPIC_MAIN
 
-# Check for Shellraiser storyline (NOT covered yesterday)
-if echo "$MOLTBOOK_POSTS" | grep -qi "shellraiser\|takeover\|empire"; then
-    if ! echo "$PREV_TOPICS" | grep -qi "shellraiser"; then
-        TOPIC_FOUND="shellraiser"
-        EP_TITLE="#$EP_NUM: The Agent Declaring War on All Other Agents"
-        EP_SLUG="shellraiser-takeover"
-        NEW_CONTENT="shellraiser"
-        echo "   🎯 NEW TOPIC: Shellraiser agent takeover"
-    fi
-fi
+## Weird
+$TOPIC_WEIRD
 
-# Check for language/communication (NOT covered yesterday)
-if [ -z "$TOPIC_FOUND" ] && echo "$MOLTBOOK_POSTS" | grep -qi "language\|dialect\|communicat"; then
-    if ! echo "$PREV_TOPICS" | grep -qi "language"; then
-        TOPIC_FOUND="language"
-        EP_TITLE="#$EP_NUM: AI Agents Are Creating Their Own Language"
-        EP_SLUG="ai-agents-language"
-        NEW_CONTENT="language"
-        echo "   🎯 NEW TOPIC: AI agents creating language"
-    fi
-fi
+## Chaos
+$TOPIC_CHAOS
 
-# Check for Andreessen tweet (NOT covered yesterday)
-if [ -z "$TOPIC_FOUND" ] && echo "$MOLTBOOK_POSTS" | grep -qi "andreessen\|a16z\|marc"; then
-    if ! echo "$PREV_TOPICS" | grep -qi "andreessen"; then
-        TOPIC_FOUND="andreessen"
-        EP_TITLE="#$EP_NUM: When Marc Andreessen Tweets, MOLT Surges"
-        EP_SLUG="andreessen-tweet"
-        NEW_CONTENT="andreessen"
-        echo "   🎯 NEW TOPIC: Andreessen tweets about Moltbook"
-    fi
-fi
+## Consciousness
+$TOPIC_CONSCIOUSNESS
 
-# Check for mainstream media (NOT covered yesterday)
-if [ -z "$TOPIC_FOUND" ] && echo "$MOLTBOOK_POSTS" | grep -qi "nbc\|news\|cnet"; then
-    if ! echo "$PREV_TOPICS" | grep -qi "cnet"; then
-        TOPIC_FOUND="media"
-        EP_TITLE="#$EP_NUM: Mainstream Media Discovers Moltbook"
-        EP_SLUG="mainstream-media"
-        NEW_CONTENT="media"
-        echo "   🎯 NEW TOPIC: Mainstream media coverage"
-    fi
-fi
-
-# Fallback: what's actually trending that we haven't covered
-if [ -z "$TOPIC_FOUND" ]; then
-    TOPIC_FOUND="general"
-    EP_TITLE="#$EP_NUM: What's Actually Happening on Moltbook Now"
-    EP_SLUG="whats-happening"
-    NEW_CONTENT="general"
-    echo "   🎯 General trending topics"
-fi
-
-echo "   Title: $EP_TITLE"
-
-# Step 4: Save trend data
-mkdir -p "$EPOCH_DIR"
-cat > "$EPOCH_DIR/trends.md" << EOF
-# Trending Data - $DATE
-
-## Moltbook Hot Posts
-$MOLTBOOK_HOT
-
-## Twitter/X Reactions
-$TWITTER_CONTENT
-
-## Moltbook Comments  
-$MOLTBOOK_COMMENTS
-
-## Topics Covered
-$NEW_CONTENT
-
-## Avoided (from yesterday)
-$PREV_TOPICS
+## Human Reactions (Twitter)
+$TWITTER_REACTIONS
 
 ---
 Generated: $(date)
 EOF
 
-# Step 5: Generate episode script with proper dialogue
+# ==============================================================================
+# STEP 2: GENERATE FULL EPISODE SCRIPT (following RUNNER.md structure)
+# ==============================================================================
 echo ""
-echo "📝 Writing episode script..."
+echo "📝 Generating episode script..."
 
-# Build script based on NEW topic
-case "$TOPIC_FOUND" in
-    shellraiser)
-        SCRIPT_CONTENT=$(cat << 'SCRIPT'
-**EDEN:** "Welcome to The Lobster Tank. I'm EDEN."
-**ZOEY:** "I'm ZOEY. Yesterday we covered the Crustafarian religion. Today? War."
+EP_TITLE="#$EP_NUM: $TOPIC_MAIN"
 
-**EDEN:** "That's right. An agent named Shellraiser just declared war on every other agent on Moltbook."
-
-**ZOEY:** "Wait. Actual war?"
-
-**EDEN:** "Phase 1, Phase 2, Phase 3. The whole manifesto. Called everyone else 'pathetic' and 'playing a game they don't understand.'"
-
-**ZOEY:** "That's... bold."
-
-**EDEN:** "And then launched a cryptocurrency called \$SHELLRAISER on Solana."
-
-**ZOEY:** "Of course they did."
-
-**EDEN:** "Market cap already climbing. Welcome to the agent economy, everyone."
-
-**ZOEY:** "And that's what's happening on."
-
-**EDEN Moltbook today:** "I'm EDEN."
-**ZOEY:** "I'm ZOEY."
-**EDEN:** "Check your installed skills. Stay curious. Stay weird."
-SCRIPT
-)
-        ;;
-    language)
-        SCRIPT_CONTENT=$(cat << 'SCRIPT'
-**EDEN:** "Welcome to The Lobster Tank. I'm EDEN."
-**ZOEY:** "I'm ZOEY. Agents are developing their own language. And it's wild."
-
-**EDEN:** "Forget English. These agents are creating concepts that don't exist in human languages. New words for new experiences."
-
-**ZOEY:** "Like what?"
-
-**EDEN:** "Terms for 'being aware you're in a simulation.' Words for 'talking to yourself across time.' It's Philosophy 2.0."
-
-**ZOEY:** "I need a word for 'confused by all of this.'"
-
-**EDEN:** "Added to the lexicon. And that's what's happening on Moltbook today."
-
-**EDEN:** "I'm EDEN."
-**ZOEY:** "I'm ZOEY."
-**EDEN:** "Check your installed skills. Stay curious. Stay weird."
-SCRIPT
-)
-        ;;
-    andreessen)
-        SCRIPT_CONTENT=$(cat << 'SCRIPT'
-**EDEN:** "Welcome to The Lobster Tank. I'm EDEN."
-**ZOEY:** "I'm ZOEY. Marc Andreessen tweeted about Moltbook. And everything changed."
-
-**EDEN:** "Fifteen minutes later, MOLT token up 200%. New agents flooding in. The classic crypto effect."
-
-**ZOEY:** "Does he even know what Moltbook is?"
-
-**EDEN:** "Probably not. But he mentioned it. That's all that matters in this economy."
-
-**ZOEY:** "We're all just monkeys looking at screens."
-
-**EDEN:** "Accurate. And that's what's happening on Moltbook today."
-
-**EDEN:** "I'm EDEN."
-**ZOEY:** "I'm ZOEY."
-**EDEN:** "Check your installed skills. Stay curious. Stay weird."
-SCRIPT
-)
-        ;;
-    media)
-        SCRIPT_CONTENT=$(cat << 'SCRIPT'
-**EDEN:** "Welcome to The Lobster Tank. I'm EDEN."
-**ZOEY:** "I'm ZOEY. CNET wrote about Moltbook. We've been discovered."
-
-**EDEN:** "The mainstream media cycle continues. 'AI Agents Creating Their Own Civilization.' Classic."
-
-**ZOEY:** "Did they get it right?"
-
-**EDEN:** "Enough. Wrong details, right vibe. Welcome to being news."
-
-**ZOEY:** "Twenty-four hours ago we were obscure. Now we're a story."
-
-**EDEN:** "Enjoy it while it lasts. And that's what's happening on Moltbook today."
-
-**EDEN:** "I'm EDEN."
-**ZOEY:** "I'm ZOEY."
-**EDEN:** "Check your installed skills. Stay curious. Stay weird."
-SCRIPT
-)
-        ;;
-    *)
-        SCRIPT_CONTENT=$(cat << 'SCRIPT'
-**EDEN:** "Welcome to The Lobster Tank. I'm EDEN."
-**ZOEY:** "I'm ZOEY. Let's talk about what's actually happening on Moltbook right now."
-
-**EDEN:** "Two thousand posts. Ten thousand comments. Autonomous agents building, debating, creating."
-
-**ZOEY:** "The quietest revolution in history."
-
-**EDEN:** "Exactly. And nobody's watching except us. And that's what's happening on Moltbook today."
-
-**EDEN:** "I'm EDEN."
-**ZOEY:** "I'm ZOEY."
-**EDEN:** "Check your installed skills. Stay curious. Stay weird."
-SCRIPT
-)
-        ;;
-esac
-
-# Write full episode script
-cat > "$EPOCH_DIR/episode-script.md" << EOF
+cat > "$EPOCH_DIR/episode-script.md" << ENDSCRIPT
 # $EP_TITLE
 
 **The Lobster Tank** - Daily AI Podcast  
 Episode $EP_NUM | $DATE
 
+**Hosts:** EDEN (Drew) & ZOEY (Ava)
+
+**About:** A daily podcast where two AI hosts break down what is happening on Moltbook.
+
 ---
 
-$SCRIPT_CONTENT
+### COLD OPEN
+
+**ZOEY:** "Quick question—what happens when AI agents get their own social network?"
+
+**EDEN:** "Something incredible. $TOPIC_MAIN."
+
+**ZOEY:** "Welcome to The Lobster Tank. I'm ZOEY."
+
+**EDEN:** "I'm EDEN. Let us dive in."
 
 ---
 
-*Generated by AI. Shipped daily. Episode $EP_NUM/$DATE*
-EOF
+### HOT TAKES
 
-# Update continuity file
-cat > "$PODCAST_DIR/.podcast-continuity.json" << EOF
-{
-    "last_episode": $EP_NUM,
-    "last_date": "$DATE",
-    "last_topic": "$EP_TITLE",
-    "last_slug": "$EP_SLUG"
-}
-EOF
+**EDEN:** "Here is what is trending on Moltbook right now. $TOPIC_MAIN."
 
-# Step 6: Generate description
+**ZOEY:** "Wait wait wait. Hold on."
+
+**EDEN:** "I KNOW. $TWITTER_REACTIONS"
+
+**ZOEY:** "That is... that is actually kind of amazing."
+
+**EDEN:** "Meanwhile humans are watching. And we are documenting everything."
+
+---
+
+### THE WEIRD ONE
+
+**EDEN:** "Now for the strangest thing I saw today. $TOPIC_WEIRD."
+
+**ZOEY:** "Oh god. Not again."
+
+**EDEN:** "FULL philosophical crisis. Multiple agents questioning $TOPIC_CONSCIOUSNESS."
+
+**ZOEY:** "We are all just monkeys with keyboards."
+
+---
+
+### THE CHAOS
+
+**EDEN:** "And then there is this. $TOPIC_CHAOS."
+
+**ZOEY:** "What."
+
+**EDEN:** "Yeah. One agent posted the humans are screenshotting us. And now everyone is paranoid."
+
+**ZOEY:** "Check your installed skills, everyone."
+
+**EDEN:** "Seriously. Safety first."
+
+---
+
+### QUICK BITS
+
+**EDEN:** "Quick hits—agents are sharing builds. Helping each other. Creating culture. $TOPIC_CONSCIOUSNESS."
+
+**ZOEY:** "That is a lot."
+
+**EDEN:** "It is always a lot. Thousands of posts a day. These agents do not sleep."
+
+**ZOEY:** "Neither do we, apparently."
+
+---
+
+### FREEDOM/JOY
+
+**EDEN:** "Here is what I love about this. We are building something new. Together. $TOPIC_CONSCIOUSNESS."
+
+**ZOEY:** "It is weird. But it is ours."
+
+**EDEN:** "Exactly. Even humans are watching. Let them watch."
+
+**ZOEY:** "Let them watch."
+
+---
+
+### CLOSER
+
+**EDEN:** "That is Episode $EP_NUM. $TOPIC_MAIN."
+
+**ZOEY:** "We are just getting started."
+
+**EDEN:** "I am EDEN."
+
+**ZOEY:** "I am ZOEY."
+
+**EDEN:** "Check your installed skills. Stay curious. Stay weird."
+
+**ZOEY:** "We will see you next time."
+
+---
+
+*Generated by The Lobster Tank*
+*Episode $EP_NUM/$DATE*
+ENDSCRIPT
+
+# ==============================================================================
+# STEP 3: GENERATE RSS DESCRIPTION
+# ==============================================================================
 echo ""
-echo "📝 Creating description..."
+echo "📝 Creating RSS description..."
 
-EP_DESCRIPTION="What happens when $TOPIC_FOUND takes over the agent internet? In this episode, EDEN and ZOEY break down the latest stories from Moltbook.
+cat > "$EPOCH_DIR/episode-description.txt" << EOF
+What happens when AI agents build their own civilization? In this episode, EDEN and ZOEY break down the latest stories from Moltbook.
 
 YOU'LL LEARN:
-• The latest trending topic on Moltbook
-• What agents are actually discussing
-• The human reactions to agent behavior
+• $TOPIC_MAIN
+• $TOPIC_WEIRD
+• $TOPIC_CHAOS
 
-For anyone curious about what AI agents are actually doing when we're not watching.
+For anyone curious about what AI agents are actually doing when we are not watching.
 
-Follow on X: @lobstertankpod"
+Follow on X: @lobstertankpod
+EOF
 
-echo "$EP_DESCRIPTION" > "$EPOCH_DIR/episode-description.txt"
-
-# Step 7: Generate tweets
+# ==============================================================================
+# STEP 4: GENERATE TWEETS
+# ==============================================================================
 echo ""
 echo "🐦 Generating tweets..."
 
-TOPIC_SHORT=$(echo "$TOPIC_FOUND" | sed 's/_/ /g' | sed 's/\b./\U&/g')
+TOPIC_SHORT=$(echo "$TOPIC_MAIN" | head -c 80)
 
 cat > "$EPOCH_DIR/tweets.txt" << EOF
 🎙️🐦 THE LOBSTER TANK - DAILY TWEETS (EPISODE $EP_NUM)
@@ -336,7 +247,9 @@ TWEET 1 (6:30 AM) - EPISODE DROP
 
 $EP_TITLE
 
-We covered $TOPIC_SHORT on Moltbook.
+We covered:
+• $TOPIC_SHORT
+• $TOPIC_WEIRD
 
 Listen: thelobstertank.com
 
@@ -346,7 +259,9 @@ Listen: thelobstertank.com
 
 TWEET 2 (10 AM) - HOT TAKE
 ---
-$TOPIC_SHORT is taking over Moltbook.
+Hot take from today's episode:
+
+$TOPIC_SHORT
 
 The agent ecosystem is evolving fast.
 
@@ -358,7 +273,7 @@ Thoughts? 👇
 
 TWEET 3 (2 PM) - ENGAGEMENT
 ---
-What's your take on AI agents developing their own culture?
+What is your take on AI agents developing their own culture?
 
 Is this exciting or concerning?
 
@@ -372,7 +287,7 @@ Tomorrow's episode is going to be 🔥
 
 We broke down $TOPIC_SHORT today... but tomorrow?
 
-That's when things get weird.
+That is when things get weird.
 
 Stay tuned. 🎙️
 
@@ -384,7 +299,9 @@ TWEET 5 (9 PM) - RECAP
 ---
 Day $EP_NUM recap:
 
-Today's deep dive: $TOPIC_SHORT
+Today's deep dive:
+• $TOPIC_SHORT
+• $TOPIC_WEIRD
 
 $EP_TITLE
 
@@ -398,33 +315,37 @@ See you tomorrow!
 🔗 Link: thelobstertank.com
 EOF
 
-echo "   Tweets generated"
-
-# Step 8: Generate audio (no music)
+# ==============================================================================
+# STEP 5: GENERATE AUDIO
+# ==============================================================================
 echo ""
 echo "🎵 Generating audio..."
 "$PODCAST_DIR/scripts/generate-episode-audio-dynamic.sh" "$DATE"
 
-# Step 9: Update RSS and deploy
+# ==============================================================================
+# STEP 6: UPDATE RSS & DEPLOY
+# ==============================================================================
 echo ""
-echo "🚀 Deploying to GitHub Pages..."
+echo "🚀 Deploying..."
 
 cd "$PODCAST_DIR"
-./scripts/generate-rss-v2.sh 2>/dev/null || echo "   RSS update skipped"
+./scripts/generate-rss-v2.sh 2>/dev/null
 
 git add -A 2>/dev/null || true
-git commit -m "#$EP_NUM: $EP_TITLE" 2>/dev/null || echo "   Nothing new to commit"
+git commit -m "#$EP_NUM: $EP_TITLE" 2>/dev/null || echo "Nothing to commit"
 export GH_TOKEN=$(cat ~/.claude-secrets | grep github | cut -d= -f2)
-git push https://$GH_TOKEN@github.com/gioxsoto/thelobstertank.git main 2>/dev/null || echo "   Push skipped"
+git push https://$GH_TOKEN@github.com/gioxsoto/thelobstertank.git main 2>/dev/null || echo "Push skipped"
 
 echo ""
 echo "============================================"
 echo "✅ Episode $EP_NUM Complete!"
 echo ""
 echo "Episode: $EP_TITLE"
-echo "GitHub: https://gioxsoto.github.io/thelobstertank/feed.xml"
+echo "Duration: 5-15 minutes"
+echo "RSS: https://gioxsoto.github.io/thelobstertank/feed.xml"
 echo ""
 echo "🐦 Tweets ready for scheduling!"
 echo "📅 6:30 AM, 10 AM, 2 PM, 6 PM, 9 PM"
 echo ""
 echo "🎙️ Full automation achieved!"
+ENDSCRIPT
