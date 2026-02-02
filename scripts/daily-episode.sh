@@ -39,6 +39,24 @@ fi
 echo "Episode: #$EP_NUM | Date: $DATE"
 
 # ==============================================================================
+# STEP 0: LOAD CONTINUITY (Avoid repeated stories)
+# ==============================================================================
+echo ""
+echo "📋 Checking continuity..."
+
+CONTINUITY_FILE="$PODCAST_DIR/.podcast-continuity.json"
+SKIPPED_TOPICS=""
+
+if [ -f "$CONTINUITY_FILE" ]; then
+    LAST_TOPIC=$(cat "$CONTINUITY_FILE" 2>/dev/null | grep -o '"last_topic"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/"last_topic"[[:space:]]*:[[:space:]]*"//' | sed 's/"$//')
+    LAST_SLUG=$(cat "$CONTINUITY_FILE" 2>/dev/null | grep -o '"last_slug"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/"last_slug"[[:space:]]*:[[:space:]]*"//' | sed 's/"$//')
+    if [ -n "$LAST_TOPIC" ]; then
+        echo "   Last episode: $LAST_TOPIC"
+        SKIPPED_TOPICS="$LAST_TOPIC $LAST_SLUG"
+    fi
+fi
+
+# ==============================================================================
 # STEP 1: FETCH MOLTBOOK TRENDS
 # ==============================================================================
 echo ""
@@ -49,6 +67,12 @@ MOLTBOOK_JSON=$(timeout 10 moltbook feed 10 hot 2>/dev/null || echo "{}")
 
 # Extract clean titles - first title is always main topic
 TOPIC_MAIN=$(echo "$MOLTBOOK_JSON" | grep -o '"title"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed 's/"title"[[:space:]]*:[[:space:]]*"//' | sed 's/"$//' | head -c 100)
+
+# Skip if same as previous episode
+if echo "$TOPIC_MAIN" | grep -qi "$SKIPPED_TOPICS" 2>/dev/null; then
+    echo "   ⚠️  Skipping repeated topic, fetching next..."
+    TOPIC_MAIN=$(echo "$MOLTBOOK_JSON" | grep -o '"title"[[:space:]]*:[[:space:]]*"[^"]*"' | head -2 | tail -1 | sed 's/"title"[[:space:]]*:[[:space:]]*"//' | sed 's/"$//' | head -c 100)
+fi
 
 # Fallback if extraction failed
 if [ -z "$TOPIC_MAIN" ] || [ "$TOPIC_MAIN" = "$MOLTBOOK_JSON" ]; then
@@ -415,6 +439,26 @@ git add -A 2>/dev/null || true
 git commit -m "#$EP_NUM: $EP_TITLE" 2>/dev/null || echo "Nothing to commit"
 export GH_TOKEN=$(cat ~/.claude-secrets | grep github | cut -d= -f2)
 git push https://$GH_TOKEN@github.com/gioxsoto/thelobstertank.git main 2>/dev/null || echo "Push skipped"
+
+# ==============================================================================
+# STEP 9: UPDATE CONTINUITY (Avoid repeated stories tomorrow)
+# ==============================================================================
+echo ""
+echo "📋 Updating continuity..."
+
+# Extract slug from topic (simple lowercase, hyphenated)
+SLUG=$(echo "$TOPIC_MAIN" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9 ]//g' | tr ' ' '-' | head -c 50)
+
+cat > "$PODCAST_DIR/.podcast-continuity.json" << EOF
+{
+    "last_episode": $EP_NUM,
+    "last_date": "$DATE",
+    "last_topic": "$EP_TITLE",
+    "last_slug": "$SLUG"
+}
+EOF
+
+echo "   Continuity updated: $EP_TITLE"
 
 echo ""
 echo "============================================"
