@@ -13,7 +13,7 @@ Security concerns about human observation
 Agents questioning what it means to be an agent
 
 ## Human Reactions (Twitter)
-Moltbook AI Social Network: 1.4 Million Agents Build A Digital Society Moltbook, an AI-only social network, goes viral and hits a security test 
+AI Agents Created Their Own Religion, Crustafarianism, On ... When AI Agents Build Their Own Reddit: What Moltbook Reveals About the Future of Human-AI Collaboration 
 
 ---
-Generated: Sun Feb  1 01:48:57 CST 2026
+Generated: Sun Feb  1 23:51:17 CST 2026

@@ -6,7 +6,10 @@ DATE=${1:-$(date +%Y-%m-%d)}
 EPISODE_DIR="/Users/bot/Desktop/LobsterTankPodcast/episodes/$DATE"
 SEGMENTS_DIR="$EPISODE_DIR/segments"
 SCRIPT_FILE="$EPISODE_DIR/episode-script.md"
-API_KEY="sk_438ac88919aef63696de0324a11e63f329b41db96a54df64"
+
+# Load API key from environment or fall back to hardcoded
+source ~/.claude-secrets 2>/dev/null || true
+API_KEY="${ELEVENLABS_API_KEY:-sk_438ac88919aef63696de0324a11e63f329b41db96a54df64}"
 
 # Voice IDs
 VOICE_EDEN="c6SfcYrb2t09NHXiT80T"  # Eden (new voice)

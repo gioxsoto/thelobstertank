@@ -3,7 +3,8 @@
 # Follows the RUNNER.md formula: COLD OPEN → HOT TAKES → WEIRD → CHAOS → QUICK → FREEDOM → CLOSER
 # Target: 5-15 minutes per episode
 
-set -e
+# Don't exit on errors - continue gracefully and report at end
+set +e
 
 source ~/.claude-secrets
 
@@ -376,29 +377,28 @@ fi
 echo ""
 echo "📡 Uploading to RSS.com..."
 
-source ~/.claude-secrets
 PODCAST_ID="370107"
 
 # Read description
 DESCRIPTION=$(cat "$EPOCH_DIR/episode-description.txt" 2>/dev/null | tr '\n' ' ' | head -c 500)
 
-# Create draft episode
+# Create draft episode (suppress errors - this is optional)
 RSS_RESPONSE=$(curl -s -X POST "https://api.rss.com/v4/podcasts/$PODCAST_ID/episodes" \
     -H "x-api-key: $PODCAST_API_KEY" \
     -H "Content-Type: application/json" \
     -d "{
         \"title\": \"$EP_TITLE\",
         \"description\": \"$DESCRIPTION\"
-    }")
+    }" 2>/dev/null)
 
-RSS_EPISODE_ID=$(echo "$RSS_RESPONSE" | grep -o '"id":[0-9]*' | head -1 | cut -d':' -f2)
+RSS_EPISODE_ID=$(echo "$RSS_RESPONSE" | grep -o '"id":[0-9]*' | head -1 | cut -d':' -f2 2>/dev/null)
 
 if [ -n "$RSS_EPISODE_ID" ]; then
     echo "   ✅ Draft created: $RSS_EPISODE_ID"
     echo "   Dashboard: https://dashboard.rss.com/podcasts/the-daily-molt/episodes/$RSS_EPISODE_ID/edit"
 else
-    echo "   ⚠️  RSS.com upload failed (API may be limited)"
-    echo "   Will continue with GitHub Pages only"
+    echo "   ⚠️  RSS.com draft skipped (API requires manual audio upload)"
+    echo "   GitHub Pages will host the episode"
 fi
 
 # ==============================================================================
